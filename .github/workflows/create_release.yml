@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "리비전을 파싱합니다..."
           echo '::set-env name=GLOB_PATTERN::$(r[0-9][0-9][0-9][0-9])'
-          echo "::set-output name=REV::$(git describe --match "${{ GLOB_PATTERN }}" --abbrev=0 --tags ${{ github.sha }})"
+          echo "::set-output name=REV::$(git describe --match ${{ GLOB_PATTERN }} --abbrev=0 --tags ${{ github.sha }})"
           echo "이번 리비전: ${{ REV }}"
           echo "이거는: ${{ github.ref }}"
           echo '::set-env name=NUM::$({${{ REV }}:2})'
