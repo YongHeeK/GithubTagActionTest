@@ -18,12 +18,12 @@ jobs:
         shell: bash
         run: |
           echo "리비전을 파싱합니다..."
-          GLOB_PATTERN="r[0-9][0-9][0-9][0-9]"
+          echo '::set-env name=GLOB_PATTERN::[0-9][0-9][0-9][0-9]'
           echo "::set-output name=REV::$(git describe --match "$GLOB_PATTERN" --abbrev=0 --tags ${{ github.sha }})"
           echo "이번 리비전: $REV"
-          NUM=${REV:2}
-          NUM=$(expr $NUM - 1)
-          NUM=$(printf "%04d\n" $NUM)
+          echo '::set-env name=NUM::${REV:2}'
+          echo '::set-env name=NUM::$(expr $NUM - 1)'
+          echo '::set-env name=NUM::$(printf "%04d\n" $NUM)'
           echo "::set-output name=OLD_REV::$(r$NUM)"
           echo "이전 리비전: $OLD_REV"
 
