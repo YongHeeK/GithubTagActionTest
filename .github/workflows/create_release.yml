@@ -11,7 +11,11 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
-    
+    outputs:
+      REV: ${{ steps.vars.outputs.REV }}
+      NUM: ${{ steps.vars.outputs.NUM }}
+      OLD_REV: ${{ steps.vars.outputs.OLD_REV }}
+      
     steps:
       - uses: actions/checkout@v2
       - name: Setting Variables
@@ -20,13 +24,13 @@ jobs:
         run: |
           echo "리비전을 파싱합니다..."
           echo "::set-output name=REV::$(git describe --match ${{ env.GLOB_PATTERN }} --abbrev=0 --tags ${{ github.sha }})"
-          echo "이번 리비전: ${{ REV }}"
+          echo "이번 리비전: ${{ outputs.REV }}"
           echo "이거는: ${{ github.ref }}"
-          echo '::set-env name=NUM::$({${{ REV }}:2})'
-          echo '::set-env name=NUM::$(expr ${{ NUM }} - 1)'
-          echo '::set-env name=NUM::$(printf "%04d\n" ${{ NUM }})'
-          echo "::set-output name=OLD_REV::$(\r${{ NUM }})"
-          echo "이전 리비전: $OLD_REV"
+          echo '::set-output name=NUM::$({${{ outputs.REV }}:2})'
+          echo '::set-output name=NUM::$(expr ${{ outputs.NUM }} - 1)'
+          echo '::set-output name=NUM::$(printf "%04d\n" ${{ outputs.NUM }})'
+          echo "::set-output name=OLD_REV::$(\r${{ outputs.NUM }})"
+          echo "이전 리비전: ${{ outputs.OLD_REV }}"
 
       - name: Checkout code
         uses: actions/checkout@v2
